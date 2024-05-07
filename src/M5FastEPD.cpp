@@ -24,7 +24,7 @@ M5FastEPD::M5FastEPD(int8_t spi_index)
     _pin_mosi = -1;
     _pin_rst = -1;
 
-    _spi_freq = 20000000;
+    _spi_freq = 10000000;
 
     _rotate = IT8951_ROTATE_0;
     _direction = 1;
@@ -37,6 +37,18 @@ M5FastEPD::~M5FastEPD()
 {
     delete _epd_spi;
 }
+
+void M5FastEPD::Power(bool bOn)
+{
+    if (bOn) {
+        pinMode(M5EPD_MAIN_PWR_PIN, OUTPUT);
+        pinMode(M5EPD_EXT_PWR_EN_PIN, OUTPUT);
+        pinMode(M5EPD_EPD_PWR_EN_PIN, OUTPUT);
+    }
+    digitalWrite(M5EPD_MAIN_PWR_PIN, bOn);
+    digitalWrite(M5EPD_EXT_PWR_EN_PIN, bOn);
+    digitalWrite(M5EPD_EPD_PWR_EN_PIN, bOn);
+} /* Power() */
 
 m5epd_err_t M5FastEPD::begin(int8_t sck, int8_t mosi, int8_t miso, int8_t cs, int8_t busy, int8_t rst)
 {
@@ -72,7 +84,7 @@ m5epd_err_t M5FastEPD::begin(int8_t sck, int8_t mosi, int8_t miso, int8_t cs, in
 
     EndSPI();
 
-    delay(1000);
+//    delay(1000);
 
     log_d("Init SUCCESS.");
 
@@ -264,7 +276,7 @@ m5epd_err_t M5FastEPD::WritePartGram4bpp(uint16_t x, uint16_t y, uint16_t w, uin
   * @param y Update Y coordinate
   * @param w width of gram, >>> Must be a multiple of 8 <<<
   * @param h height of gram
-  * @param gram 4bpp garm data
+  * @param gram 2bpp garm data
   * @retval m5epd_err_t
   */
 m5epd_err_t M5FastEPD::WritePartGram2bpp(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const uint8_t *gram)

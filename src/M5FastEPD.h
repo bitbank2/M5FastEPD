@@ -8,6 +8,10 @@
 #define M5EPD_PANEL_W   960
 #define M5EPD_PANEL_H   540
 
+#define M5EPD_MAIN_PWR_PIN 2
+#define M5EPD_EXT_PWR_EN_PIN 5
+#define M5EPD_EPD_PWR_EN_PIN 23
+
 typedef enum
 {
     M5EPD_OK = 0,
@@ -101,6 +105,7 @@ public:
 public:
     M5FastEPD(int8_t spi_index = VSPI);
     ~M5FastEPD();
+    void Power(bool bOn);
     m5epd_err_t begin(int8_t sck, int8_t mosi, int8_t miso, int8_t cs, int8_t busy, int8_t rst = -1);
     m5epd_err_t Clear(bool init = false);
     m5epd_err_t WriteFullGram4bpp(const uint8_t *gram);
